@@ -1,0 +1,657 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>KOLD — Downloader</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:ital,wght@0,300;0,400;1,300&display=swap" rel="stylesheet"/>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0a0a0a;
+      --fg: #f0f0f0;
+      --muted: #444;
+      --border: #222;
+      --accent: #f0f0f0;
+      --red: #ff3333;
+      --radius: 2px;
+    }
+
+    html, body {
+      height: 100%;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: 'DM Mono', monospace;
+      font-size: 14px;
+      overflow-x: hidden;
+    }
+
+    /* Grain overlay */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.04'/%3E%3C/svg%3E");
+      background-size: 180px;
+      pointer-events: none;
+      z-index: 999;
+      opacity: 0.5;
+    }
+
+    /* Layout */
+    .wrapper {
+      max-width: 680px;
+      margin: 0 auto;
+      padding: 0 24px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      padding: 48px 0 0;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 32px;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: clamp(56px, 10vw, 88px);
+      letter-spacing: 0.04em;
+      line-height: 1;
+      color: var(--fg);
+    }
+
+    .logo span {
+      color: var(--muted);
+    }
+
+    .tagline {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      text-align: right;
+      line-height: 1.6;
+      padding-bottom: 6px;
+    }
+
+    /* Main */
+    main {
+      flex: 1;
+      padding: 48px 0 32px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    /* URL Input */
+    .input-group {
+      display: flex;
+      gap: 0;
+      border: 1px solid var(--border);
+      background: #111;
+      margin-bottom: 32px;
+      transition: border-color 0.2s;
+    }
+
+    .input-group:focus-within {
+      border-color: var(--fg);
+    }
+
+    .input-group input {
+      flex: 1;
+      background: transparent;
+      border: none;
+      outline: none;
+      padding: 16px 18px;
+      font-family: 'DM Mono', monospace;
+      font-size: 13px;
+      color: var(--fg);
+      letter-spacing: 0.02em;
+    }
+
+    .input-group input::placeholder { color: var(--muted); }
+
+    .paste-btn {
+      background: transparent;
+      border: none;
+      border-left: 1px solid var(--border);
+      padding: 0 16px;
+      color: var(--muted);
+      cursor: pointer;
+      font-family: 'DM Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      transition: color 0.2s, background 0.2s;
+    }
+
+    .paste-btn:hover { color: var(--fg); background: #1a1a1a; }
+
+    /* Format selector */
+    .format-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+      gap: 8px;
+      margin-bottom: 32px;
+    }
+
+    .format-option {
+      display: none;
+    }
+
+    .format-label {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      border: 1px solid var(--border);
+      padding: 14px 16px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      background: #111;
+      user-select: none;
+    }
+
+    .format-label:hover { border-color: #555; }
+
+    .format-option:checked + .format-label {
+      border-color: var(--fg);
+      background: #1c1c1c;
+    }
+
+    .format-label .fmt-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.06em;
+      line-height: 1;
+    }
+
+    .format-label .fmt-desc {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    /* Quality row */
+    .quality-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 40px;
+      flex-wrap: wrap;
+    }
+
+    .quality-chip input { display: none; }
+
+    .quality-chip label {
+      display: block;
+      border: 1px solid var(--border);
+      padding: 8px 14px;
+      font-size: 11px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: all 0.15s;
+      background: #111;
+    }
+
+    .quality-chip label:hover { border-color: #555; }
+    .quality-chip input:checked + label {
+      border-color: var(--fg);
+      background: var(--fg);
+      color: var(--bg);
+    }
+
+    /* Download button */
+    .dl-btn {
+      width: 100%;
+      padding: 18px;
+      background: var(--fg);
+      color: var(--bg);
+      border: none;
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 22px;
+      letter-spacing: 0.12em;
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .dl-btn:hover { background: #ddd; }
+    .dl-btn:active { background: #bbb; }
+
+    .dl-btn.loading {
+      pointer-events: none;
+      background: #222;
+      color: var(--fg);
+    }
+
+    .dl-btn.loading .btn-text::after {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border: 1px solid var(--muted);
+      border-top-color: var(--fg);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-left: 10px;
+      vertical-align: middle;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Status / info card */
+    .info-card {
+      margin-top: 32px;
+      border: 1px solid var(--border);
+      background: #111;
+      overflow: hidden;
+      display: none;
+      animation: slideIn 0.25s ease;
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    .info-card.visible { display: block; }
+
+    .info-card-header {
+      padding: 12px 18px;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    .status-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: var(--muted);
+      flex-shrink: 0;
+    }
+
+    .status-dot.ok { background: #4cff91; }
+    .status-dot.err { background: var(--red); }
+    .status-dot.loading { background: #f0f0f0; animation: pulse 1s ease infinite; }
+
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+    .info-card-body {
+      padding: 18px;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      padding: 6px 0;
+      border-bottom: 1px solid #1a1a1a;
+      font-size: 12px;
+    }
+
+    .info-row:last-child { border-bottom: none; }
+    .info-row .key { color: var(--muted); }
+    .info-row .val { color: var(--fg); text-align: right; max-width: 60%; word-break: break-word; }
+
+    .error-msg {
+      color: var(--red);
+      font-size: 12px;
+      padding: 16px 18px;
+      font-style: italic;
+    }
+
+    /* Progress bar */
+    .progress-wrap {
+      height: 2px;
+      background: var(--border);
+      margin-top: 12px;
+      display: none;
+    }
+
+    .progress-wrap.visible { display: block; }
+
+    .progress-bar {
+      height: 100%;
+      background: var(--fg);
+      width: 0%;
+      transition: width 0.3s ease;
+    }
+
+    /* Footer */
+    footer {
+      padding: 24px 0;
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-left {
+      font-size: 10px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+    }
+
+    .footer-right {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px;
+      letter-spacing: 0.18em;
+      color: #2a2a2a;
+    }
+
+    /* API status pill */
+    .api-pill {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 10px;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 40px;
+    }
+
+    .api-pill .dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #333;
+    }
+    .api-pill .dot.online { background: #4cff91; box-shadow: 0 0 6px #4cff9155; }
+    .api-pill .dot.offline { background: var(--red); }
+
+    /* Divider */
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 32px 0;
+    }
+
+    /* Responsive */
+    @media (max-width: 480px) {
+      .format-grid { grid-template-columns: 1fr 1fr; }
+      header { flex-direction: column; align-items: flex-start; gap: 8px; }
+      .tagline { text-align: left; }
+    }
+  </style>
+</head>
+<body>
+<div class="wrapper">
+
+  <header>
+    <div class="logo">KOLD<span>.</span></div>
+    <div class="tagline">
+      Youtube Downloader<br/>
+      by kold — v1.0
+    </div>
+  </header>
+
+  <main>
+
+    <!-- API Status -->
+    <div class="api-pill" id="apiPill">
+      <div class="dot" id="apiDot"></div>
+      <span id="apiStatus">Verificando conexión...</span>
+    </div>
+
+    <!-- URL -->
+    <div class="section-label">URL del video</div>
+    <div class="input-group">
+      <input type="text" id="urlInput" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off" spellcheck="false"/>
+      <button class="paste-btn" onclick="pasteUrl()">Pegar</button>
+    </div>
+
+    <!-- Format -->
+    <div class="section-label">Formato</div>
+    <div class="format-grid">
+      <div>
+        <input type="radio" name="format" id="fmt-mp4" class="format-option" value="mp4" checked/>
+        <label for="fmt-mp4" class="format-label">
+          <span class="fmt-name">MP4</span>
+          <span class="fmt-desc">Video + Audio</span>
+        </label>
+      </div>
+      <div>
+        <input type="radio" name="format" id="fmt-mp3" class="format-option" value="mp3"/>
+        <label for="fmt-mp3" class="format-label">
+          <span class="fmt-name">MP3</span>
+          <span class="fmt-desc">Solo Audio</span>
+        </label>
+      </div>
+      <div>
+        <input type="radio" name="format" id="fmt-webm" class="format-option" value="webm"/>
+        <label for="fmt-webm" class="format-label">
+          <span class="fmt-name">WEBM</span>
+          <span class="fmt-desc">Video Web</span>
+        </label>
+      </div>
+      <div>
+        <input type="radio" name="format" id="fmt-wav" class="format-option" value="wav"/>
+        <label for="fmt-wav" class="format-label">
+          <span class="fmt-name">WAV</span>
+          <span class="fmt-desc">Audio HQ</span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Quality -->
+    <div class="section-label">Calidad</div>
+    <div class="quality-row">
+      <div class="quality-chip">
+        <input type="radio" name="quality" id="q-best" value="best" checked/>
+        <label for="q-best">Best</label>
+      </div>
+      <div class="quality-chip">
+        <input type="radio" name="quality" id="q-1080" value="1080"/>
+        <label for="q-1080">1080p</label>
+      </div>
+      <div class="quality-chip">
+        <input type="radio" name="quality" id="q-720" value="720"/>
+        <label for="q-720">720p</label>
+      </div>
+      <div class="quality-chip">
+        <input type="radio" name="quality" id="q-480" value="480"/>
+        <label for="q-480">480p</label>
+      </div>
+      <div class="quality-chip">
+        <input type="radio" name="quality" id="q-360" value="360"/>
+        <label for="q-360">360p</label>
+      </div>
+    </div>
+
+    <!-- Button -->
+    <button class="dl-btn" id="dlBtn" onclick="startDownload()">
+      <span class="btn-text" id="btnText">DESCARGAR</span>
+    </button>
+
+    <!-- Progress -->
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <!-- Info Card -->
+    <div class="info-card" id="infoCard">
+      <div class="info-card-header">
+        <div class="status-dot" id="statusDot"></div>
+        <span id="statusLabel">Estado</span>
+      </div>
+      <div class="info-card-body" id="infoCardBody"></div>
+    </div>
+
+  </main>
+
+  <footer>
+    <div class="footer-right">BY KOLD</div>
+  </footer>
+
+</div>
+
+<script>
+  const API = 'http://localhost:5000';
+
+  // ─── API health check ─────────────────────────────────────
+  async function checkApi() {
+    const dot  = document.getElementById('apiDot');
+    const stat = document.getElementById('apiStatus');
+    try {
+      const r = await fetch(`${API}/health`, { signal: AbortSignal.timeout(2500) });
+      if (r.ok) {
+        dot.className  = 'dot online';
+        stat.textContent = 'Backend conectado';
+      } else { throw new Error(); }
+    } catch {
+      dot.className  = 'dot offline';
+      stat.textContent = 'Backend desconectado — inicia Flask';
+    }
+  }
+  checkApi();
+
+  // ─── Paste ────────────────────────────────────────────────
+  async function pasteUrl() {
+    try {
+      const t = await navigator.clipboard.readText();
+      document.getElementById('urlInput').value = t;
+    } catch { alert('Permite acceso al portapapeles.'); }
+  }
+
+  // ─── Download ─────────────────────────────────────────────
+  async function startDownload() {
+    const url     = document.getElementById('urlInput').value.trim();
+    const format  = document.querySelector('input[name="format"]:checked').value;
+    const quality = document.querySelector('input[name="quality"]:checked').value;
+    const btn     = document.getElementById('dlBtn');
+    const btnText = document.getElementById('btnText');
+
+    if (!url) { showCard('error', 'Sin URL', [{ k: 'Error', v: 'Ingresa una URL de YouTube.' }]); return; }
+    if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+      showCard('error', 'URL inválida', [{ k: 'Error', v: 'Solo se admiten URLs de YouTube.' }]); return;
+    }
+
+    // Loading state
+    btn.classList.add('loading');
+    btnText.textContent = 'PROCESANDO';
+    showCard('loading', 'Obteniendo info...', [{ k: 'URL', v: url }, { k: 'Formato', v: format.toUpperCase() }, { k: 'Calidad', v: quality }]);
+    setProgress(15);
+
+    try {
+      // Step 1: get info
+      const infoRes = await fetch(`${API}/info`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+      });
+      const info = await infoRes.json();
+      if (!infoRes.ok) throw new Error(info.error || 'No se pudo obtener info del video.');
+
+      setProgress(40);
+      showCard('loading', 'Descargando...', [
+        { k: 'Título',    v: info.title    || '—' },
+        { k: 'Duración',  v: info.duration || '—' },
+        { k: 'Canal',     v: info.channel  || '—' },
+        { k: 'Formato',   v: format.toUpperCase() },
+        { k: 'Calidad',   v: quality },
+      ]);
+
+      // Step 2: download
+      const dlRes = await fetch(`${API}/download`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, format, quality })
+      });
+
+      if (!dlRes.ok) {
+        const err = await dlRes.json();
+        throw new Error(err.error || 'Error al descargar.');
+      }
+
+      setProgress(90);
+
+      // Trigger browser download
+      const blob     = await dlRes.blob();
+      const filename = getFilename(dlRes, info.title, format);
+      const a        = document.createElement('a');
+      a.href         = URL.createObjectURL(blob);
+      a.download     = filename;
+      a.click();
+      URL.revokeObjectURL(a.href);
+
+      setProgress(100);
+      showCard('ok', 'Descarga completada', [
+        { k: 'Título',   v: info.title    || '—' },
+        { k: 'Archivo',  v: filename },
+        { k: 'Formato',  v: format.toUpperCase() },
+        { k: 'Calidad',  v: quality },
+      ]);
+
+    } catch (e) {
+      setProgress(0);
+      showCard('error', 'Error', [{ k: 'Detalle', v: e.message }]);
+    } finally {
+      btn.classList.remove('loading');
+      btnText.textContent = 'DESCARGAR';
+    }
+  }
+
+  // ─── Helpers ──────────────────────────────────────────────
+  function showCard(type, label, rows) {
+    const card  = document.getElementById('infoCard');
+    const dot   = document.getElementById('statusDot');
+    const lbl   = document.getElementById('statusLabel');
+    const body  = document.getElementById('infoCardBody');
+
+    card.classList.add('visible');
+    lbl.textContent = label;
+    dot.className   = 'status-dot ' + (type === 'ok' ? 'ok' : type === 'error' ? 'err' : 'loading');
+
+    if (type === 'error') {
+      body.innerHTML = `<div class="error-msg">${rows[0].v}</div>`;
+    } else {
+      body.innerHTML = rows.map(r =>
+        `<div class="info-row"><span class="key">${r.k}</span><span class="val">${r.v}</span></div>`
+      ).join('');
+    }
+  }
+
+  function setProgress(pct) {
+    const wrap = document.getElementById('progressWrap');
+    const bar  = document.getElementById('progressBar');
+    wrap.className = pct > 0 && pct < 100 ? 'progress-wrap visible' : 'progress-wrap';
+    bar.style.width = pct + '%';
+  }
+
+  function getFilename(res, title, format) {
+    const cd = res.headers.get('Content-Disposition') || '';
+    const m  = cd.match(/filename="?([^"]+)"?/);
+    if (m) return m[1];
+    const safe = (title || 'video').replace(/[\\/:*?"<>|]/g, '_').substring(0, 80);
+    return `${safe}.${format}`;
+  }
+
+  // Enter key
+  document.getElementById('urlInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') startDownload();
+  });
+</script>
+</body>
+</html>
