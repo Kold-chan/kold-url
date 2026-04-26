@@ -40,11 +40,14 @@ def run_ytdlp(*args):
         '--sleep-interval', '3',
         '--max-sleep-interval', '6',
 
-        # navegador real
-        '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
+        # simular navegador
+        '--user-agent', 'Mozilla/5.0',
 
-        # 🔥 clave
-        '--cookies', 'cookies.txt',
+        # 🔥 clave: cliente iOS
+        '--extractor-args', 'youtube:player_client=ios',
+
+        # opcional pero ayuda
+        '--geo-bypass',
     ]
 
     result = subprocess.run(
@@ -53,6 +56,7 @@ def run_ytdlp(*args):
         text=True
     )
     return result.stdout, result.stderr, result.returncode
+
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
 @app.route('/health')
