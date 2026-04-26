@@ -389,7 +389,7 @@
 
     <div class="section-label">URL del video</div>
     <div class="input-group">
-      <input type="text" id="urlInput" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off" spellcheck="false"/>
+      <input type="text" id="urlInput" placeholder="YouTube o Instagram URL..." />
       <button class="paste-btn" onclick="pasteUrl()">Pegar</button>
     </div>
 
@@ -515,10 +515,15 @@
       showCard('error', 'Sin URL', [{ k: 'Error', v: 'Ingresa una URL de YouTube.' }]);
       return;
     }
-    if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
-      showCard('error', 'URL inválida', [{ k: 'Error', v: 'Solo se admiten URLs de YouTube.' }]);
-      return;
-    }
+    const isYouTube = url.includes('youtube.com') || url.includes('youtu.be');
+const isInstagram = url.includes('instagram.com');
+
+if (!isYouTube && !isInstagram) {
+  showCard('error', 'URL inválida', [
+    { k: 'Error', v: 'Solo se admiten URLs de YouTube o Instagram.' }
+  ]);
+  return;
+}
 
     btn.classList.add('loading');
     btnText.textContent = 'PROCESANDO';
