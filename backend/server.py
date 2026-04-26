@@ -43,6 +43,8 @@ def run_ytdlp(*args) -> tuple[str, str, int]:
         # 🔥 Simular navegador real
         '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36',
 
+        '--extractor-args', 'youtube:player_client=android',
+
         # 🔥 Cookies (IMPORTANTE)
         '--cookies', 'cookies.txt',
     ]
