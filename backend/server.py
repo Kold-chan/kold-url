@@ -32,31 +32,27 @@ def sanitize(name: str, max_len: int = 80) -> str:
     return re.sub(r'[\\/:*?"<>|]', '_', name)[:max_len]
 
 
-def run_ytdlp(*args) -> tuple[str, str, int]:
+def run_ytdlp(*args):
     base_args = [
         '--no-playlist',
 
-        # 🔥 Evitar detección de bot
-        '--sleep-interval', '2',
-        '--max-sleep-interval', '5',
+        # evitar 429
+        '--sleep-interval', '3',
+        '--max-sleep-interval', '6',
 
-        # 🔥 Simular navegador real
-        '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36',
+        # navegador real
+        '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64)',
 
-        '--extractor-args', 'youtube:player_client=android',
-
-        # 🔥 Cookies (IMPORTANTE)
+        # 🔥 clave
         '--cookies', 'cookies.txt',
     ]
 
     result = subprocess.run(
-        ['yt-dlp', *base_args, *args],
+        ['python', '-m', 'yt_dlp', *base_args, *args],
         capture_output=True,
         text=True
     )
     return result.stdout, result.stderr, result.returncode
-
-
 # ── Endpoints ─────────────────────────────────────────────────────────────────
 
 @app.route('/health')
