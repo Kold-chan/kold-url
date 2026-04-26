@@ -33,9 +33,22 @@ def sanitize(name: str, max_len: int = 80) -> str:
 
 
 def run_ytdlp(*args) -> tuple[str, str, int]:
-    """Ejecuta yt-dlp y devuelve (stdout, stderr, returncode)."""
+    base_args = [
+        '--no-playlist',
+
+        # 🔥 Evitar detección de bot
+        '--sleep-interval', '2',
+        '--max-sleep-interval', '5',
+
+        # 🔥 Simular navegador real
+        '--user-agent', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 Chrome/120 Safari/537.36',
+
+        # 🔥 Cookies (IMPORTANTE)
+        '--cookies', 'cookies.txt',
+    ]
+
     result = subprocess.run(
-        ['yt-dlp', *args],
+        ['yt-dlp', *base_args, *args],
         capture_output=True,
         text=True
     )
