@@ -9,6 +9,24 @@ Uso:
 
 El servidor corre en http://localhost:5000
 """
+import time
+import random
+
+def run_ytdlp(*args):
+    time.sleep(random.uniform(2, 5))  # 🔥 evita spam
+
+    base_args = [
+        '--no-playlist',
+        '--user-agent', 'Mozilla/5.0',
+        '--cookies-from-browser', 'firefox',
+    ]
+
+    result = subprocess.run(
+        ['python', '-m', 'yt_dlp', *base_args, *args],
+        capture_output=True,
+        text=True
+    )
+    return result.stdout, result.stderr, result.returncode
 
 import os
 import re
