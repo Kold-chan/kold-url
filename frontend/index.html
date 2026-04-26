@@ -27,7 +27,6 @@
       overflow-x: hidden;
     }
 
-    /* Grain overlay */
     body::before {
       content: '';
       position: fixed;
@@ -39,7 +38,6 @@
       opacity: 0.5;
     }
 
-    /* Layout */
     .wrapper {
       max-width: 680px;
       margin: 0 auto;
@@ -49,7 +47,6 @@
       flex-direction: column;
     }
 
-    /* Header */
     header {
       padding: 48px 0 0;
       border-bottom: 1px solid var(--border);
@@ -67,9 +64,7 @@
       color: var(--fg);
     }
 
-    .logo span {
-      color: var(--muted);
-    }
+    .logo span { color: var(--muted); }
 
     .tagline {
       font-size: 11px;
@@ -81,7 +76,6 @@
       padding-bottom: 6px;
     }
 
-    /* Main */
     main {
       flex: 1;
       padding: 48px 0 32px;
@@ -95,7 +89,6 @@
       margin-bottom: 12px;
     }
 
-    /* URL Input */
     .input-group {
       display: flex;
       gap: 0;
@@ -105,9 +98,7 @@
       transition: border-color 0.2s;
     }
 
-    .input-group:focus-within {
-      border-color: var(--fg);
-    }
+    .input-group:focus-within { border-color: var(--fg); }
 
     .input-group input {
       flex: 1;
@@ -139,7 +130,6 @@
 
     .paste-btn:hover { color: var(--fg); background: #1a1a1a; }
 
-    /* Format selector */
     .format-grid {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
@@ -147,9 +137,7 @@
       margin-bottom: 32px;
     }
 
-    .format-option {
-      display: none;
-    }
+    .format-option { display: none; }
 
     .format-label {
       display: flex;
@@ -183,7 +171,6 @@
       letter-spacing: 0.08em;
     }
 
-    /* Quality row */
     .quality-row {
       display: flex;
       gap: 8px;
@@ -206,13 +193,13 @@
     }
 
     .quality-chip label:hover { border-color: #555; }
+
     .quality-chip input:checked + label {
       border-color: var(--fg);
       background: var(--fg);
       color: var(--bg);
     }
 
-    /* Download button */
     .dl-btn {
       width: 100%;
       padding: 18px;
@@ -256,7 +243,6 @@
 
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* Status / info card */
     .info-card {
       margin-top: 32px;
       border: 1px solid var(--border);
@@ -293,15 +279,13 @@
       flex-shrink: 0;
     }
 
-    .status-dot.ok { background: #4cff91; }
+    .status-dot.ok  { background: #4cff91; }
     .status-dot.err { background: var(--red); }
     .status-dot.loading { background: #f0f0f0; animation: pulse 1s ease infinite; }
 
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
-    .info-card-body {
-      padding: 18px;
-    }
+    .info-card-body { padding: 18px; }
 
     .info-row {
       display: flex;
@@ -322,7 +306,6 @@
       font-style: italic;
     }
 
-    /* Progress bar */
     .progress-wrap {
       height: 2px;
       background: var(--border);
@@ -339,7 +322,6 @@
       transition: width 0.3s ease;
     }
 
-    /* Footer */
     footer {
       padding: 24px 0;
       border-top: 1px solid var(--border);
@@ -361,7 +343,6 @@
       color: #2a2a2a;
     }
 
-    /* API status pill */
     .api-pill {
       display: flex;
       align-items: center;
@@ -378,17 +359,9 @@
       border-radius: 50%;
       background: #333;
     }
-    .api-pill .dot.online { background: #4cff91; box-shadow: 0 0 6px #4cff9155; }
+    .api-pill .dot.online  { background: #4cff91; box-shadow: 0 0 6px #4cff9155; }
     .api-pill .dot.offline { background: var(--red); }
 
-    /* Divider */
-    .divider {
-      height: 1px;
-      background: var(--border);
-      margin: 32px 0;
-    }
-
-    /* Responsive */
     @media (max-width: 480px) {
       .format-grid { grid-template-columns: 1fr 1fr; }
       header { flex-direction: column; align-items: flex-start; gap: 8px; }
@@ -409,20 +382,17 @@
 
   <main>
 
-    <!-- API Status -->
     <div class="api-pill" id="apiPill">
       <div class="dot" id="apiDot"></div>
       <span id="apiStatus">Verificando conexión...</span>
     </div>
 
-    <!-- URL -->
     <div class="section-label">URL del video</div>
     <div class="input-group">
       <input type="text" id="urlInput" placeholder="https://www.youtube.com/watch?v=..." autocomplete="off" spellcheck="false"/>
       <button class="paste-btn" onclick="pasteUrl()">Pegar</button>
     </div>
 
-    <!-- Format -->
     <div class="section-label">Formato</div>
     <div class="format-grid">
       <div>
@@ -455,7 +425,6 @@
       </div>
     </div>
 
-    <!-- Quality -->
     <div class="section-label">Calidad</div>
     <div class="quality-row">
       <div class="quality-chip">
@@ -480,17 +449,14 @@
       </div>
     </div>
 
-    <!-- Button -->
     <button class="dl-btn" id="dlBtn" onclick="startDownload()">
       <span class="btn-text" id="btnText">DESCARGAR</span>
     </button>
 
-    <!-- Progress -->
     <div class="progress-wrap" id="progressWrap">
       <div class="progress-bar" id="progressBar"></div>
     </div>
 
-    <!-- Info Card -->
     <div class="info-card" id="infoCard">
       <div class="info-card-header">
         <div class="status-dot" id="statusDot"></div>
@@ -502,11 +468,160 @@
   </main>
 
   <footer>
+    <div class="footer-left"></div>
     <div class="footer-right">BY KOLD</div>
   </footer>
 
 </div>
 
-<script>(function(){var _zyrkmb=atob("Y29uc3QgQVBJPSJceDY4XHg3NFx4NzRceDcwXHg3M1x4M2FceDJmXHgyZlx4NmJceDZmXHg2Y1x4NjRceDJkXHg3NVx4NzJceDZjXHgyZVx4NmZceDZlXHg3Mlx4NjVceDZlXHg2NFx4NjVceDcyXHgyZVx4NjNceDZmXHg2ZFx4MmYiO2FzeW5jIGZ1bmN0aW9uIGNoZWNrQXBpKCl7Y29uc3QgZG90PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJceDYxXHg3MFx4NjlceDQ0XHg2Zlx4NzQiKTtjb25zdCBzdGF0PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJceDYxXHg3MFx4NjlceDUzXHg3NFx4NjFceDc0XHg3NVx4NzMiKTt0cnl7Y29uc3Qgcj1hd2FpdCBmZXRjaChgJHtBUEl9L2hlYWx0aGAse3NpZ25hbDpBYm9ydFNpZ25hbC50aW1lb3V0KDI1MDApfSk7aWYoci5vayl7ZG90LmNsYXNzTmFtZT0iXHg2NFx4NmZceDc0XHgyMFx4NmZceDZlXHg2Y1x4NjlceDZlXHg2NSI7c3RhdC50ZXh0Q29udGVudD0iXHg0Mlx4NjFceDYzXHg2Ylx4NjVceDZlXHg2NFx4MjBceDYzXHg2Zlx4NmVceDY1XHg2M1x4NzRceDYxXHg2NFx4NmYiO31lbHNle3Rocm93IG5ldyBFcnJvcigpO319Y2F0Y2h7ZG90LmNsYXNzTmFtZT0iXHg2NFx4NmZceDc0XHgyMFx4NmZceDY2XHg2Nlx4NmNceDY5XHg2ZVx4NjUiO3N0YXQudGV4dENvbnRlbnQ9Ilx4NDJceDYxXHg2M1x4NmJceDY1XHg2ZVx4NjRceDIwXHg2NFx4NjVceDczXHg2M1x4NmZceDZlXHg2NVx4NjNceDc0XHg2MVx4NjRceDZmXHgyMFx4MjAxNFx4MjBceDY5XHg2ZVx4NjlceDYzXHg2OVx4NjFceDIwXHg0Nlx4NmNceDYxXHg3M1x4NmIiO319CmNoZWNrQXBpKCk7YXN5bmMgZnVuY3Rpb24gcGFzdGVVcmwoKXt0cnl7Y29uc3QgdD1hd2FpdCBuYXZpZ2F0b3IuY2xpcGJvYXJkLnJlYWRUZXh0KCk7ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoIlx4NzVceDcyXHg2Y1x4NDlceDZlXHg3MFx4NzVceDc0IikudmFsdWU9dDt9Y2F0Y2h7YWxlcnQoIlx4NTBceDY1XHg3Mlx4NmRceDY5XHg3NFx4NjVceDIwXHg2MVx4NjNceDYzXHg2NVx4NzNceDZmXHgyMFx4NjFceDZjXHgyMFx4NzBceDZmXHg3Mlx4NzRceDYxXHg3MFx4NjFceDcwXHg2NVx4NmNceDY1XHg3M1x4MmUiKTt9fQphc3luYyBmdW5jdGlvbiBzdGFydERvd25sb2FkKCl7Y29uc3QgdXJsPWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJceDc1XHg3Mlx4NmNceDQ5XHg2ZVx4NzBceDc1XHg3NCIpLnZhbHVlLnRyaW0oKTtjb25zdCBmb3JtYXQ9ZG9jdW1lbnQucXVlcnlTZWxlY3RvcignaW5wdXRbbmFtZT0iXHg2Nlx4NmZceDcyXHg2ZFx4NjFceDc0Il06Y2hlY2tlZCJceDI5XHgyZVx4NzZceDYxXHg2Y1x4NzVceDY1XHgzYlx4NjNceDZmXHg2ZVx4NzNceDc0XHgyMFx4NzFceDc1XHg2MVx4NmNceDY5XHg3NFx4NzlceDNkXHg2NFx4NmZceDYzXHg3NVx4NmRceDY1XHg2ZVx4NzRceDJlXHg3MVx4NzVceDY1XHg3Mlx4NzlceDUzXHg2NVx4NmNceDY1XHg2M1x4NzRceDZmXHg3Mlx4MjgiaW5wdXRbbmFtZT0iXHg3MVx4NzVceDYxXHg2Y1x4NjlceDc0XHg3OSJdOmNoZWNrZWQiXHgyOVx4MmVceDc2XHg2MVx4NmNceDc1XHg2NVx4M2JceDYzXHg2Zlx4NmVceDczXHg3NFx4MjBceDYyXHg3NFx4NmVceDNkXHg2NFx4NmZceDYzXHg3NVx4NmRceDY1XHg2ZVx4NzRceDJlXHg2N1x4NjVceDc0XHg0NVx4NmNceDY1XHg2ZFx4NjVceDZlXHg3NFx4NDJceDc5XHg0OVx4NjRceDI4ImRsQnRuIlx4MjlceDNiXHg2M1x4NmZceDZlXHg3M1x4NzRceDIwXHg2Mlx4NzRceDZlXHg1NFx4NjVceDc4XHg3NFx4M2RceDY0XHg2Zlx4NjNceDc1XHg2ZFx4NjVceDZlXHg3NFx4MmVceDY3XHg2NVx4NzRceDQ1XHg2Y1x4NjVceDZkXHg2NVx4NmVceDc0XHg0Mlx4NzlceDQ5XHg2NFx4MjgiYnRuVGV4dCJceDI5XHgzYlx4NjlceDY2XHgyOFx4MjFceDc1XHg3Mlx4NmNceDI5XHg3Ylx4NzNceDY4XHg2Zlx4NzdceDQzXHg2MVx4NzJceDY0XHgyOCJlcnJvcicsIlx4NTNceDY5XHg2ZVx4MjBceDU1XHg1Mlx4NGMiLFt7azoiXHg0NVx4NzJceDcyXHg2Zlx4NzIiLHY6Ilx4NDlceDZlXHg2N1x4NzJceDY1XHg3M1x4NjFceDIwXHg3NVx4NmVceDYxXHgyMFx4NTVceDUyXHg0Y1x4MjBceDY0XHg2NVx4MjBceDU5XHg2Zlx4NzVceDU0XHg3NVx4NjJceDY1XHgyZSJ9XSk7cmV0dXJuO30KaWYoIXVybC5pbmNsdWRlcygiXHg3OVx4NmZceDc1XHg3NFx4NzVceDYyXHg2NVx4MmVceDYzXHg2Zlx4NmQiKSYmIXVybC5pbmNsdWRlcygiXHg3OVx4NmZceDc1XHg3NFx4NzVceDJlXHg2Mlx4NjUiKSl7c2hvd0NhcmQoIlx4NjVceDcyXHg3Mlx4NmZceDcyIiwiXHg1NVx4NTJceDRjXHgyMFx4NjlceDZlXHg3Nlx4ZTFceDZjXHg2OVx4NjRceDYxIixbe2s6Ilx4NDVceDcyXHg3Mlx4NmZceDcyIix2OiJceDUzXHg2Zlx4NmNceDZmXHgyMFx4NzNceDY1XHgyMFx4NjFceDY0XHg2ZFx4NjlceDc0XHg2NVx4NmVceDIwXHg1NVx4NTJceDRjXHg3M1x4MjBceDY0XHg2NVx4MjBceDU5XHg2Zlx4NzVceDU0XHg3NVx4NjJceDY1XHgyZSJ9XSk7cmV0dXJuO30KYnRuLmNsYXNzTGlzdC5hZGQoIlx4NmNceDZmXHg2MVx4NjRceDY5XHg2ZVx4NjciKTtidG5UZXh0LnRleHRDb250ZW50PSJceDUwXHg1Mlx4NGZceDQzXHg0NVx4NTNceDQxXHg0ZVx4NDRceDRmIjtzaG93Q2FyZCgiXHg2Y1x4NmZceDYxXHg2NFx4NjlceDZlXHg2NyIsIlx4NGZceDYyXHg3NFx4NjVceDZlXHg2OVx4NjVceDZlXHg2NFx4NmZceDIwXHg2OVx4NmVceDY2XHg2Zlx4MmVceDJlXHgyZSIsW3trOidVUkwiXHgyY1x4NzZceDNhXHg3NVx4NzJceDZjXHg3ZFx4MmNceDdiXHg2Ylx4M2EiRm9ybWF0byJceDJjXHg3Nlx4M2FceDY2XHg2Zlx4NzJceDZkXHg2MVx4NzRceDJlXHg3NFx4NmZceDU1XHg3MFx4NzBceDY1XHg3Mlx4NDNceDYxXHg3M1x4NjVceDI4XHgyOVx4N2RceDJjXHg3Ylx4NmJceDNhIkNhbGlkYWQiXHgyY1x4NzZceDNhXHg3MVx4NzVceDYxXHg2Y1x4NjlceDc0XHg3OVx4N2RceDVkXHgyOVx4M2JceDczXHg2NVx4NzRceDUwXHg3Mlx4NmZceDY3XHg3Mlx4NjVceDczXHg3M1x4MjhceDMxXHgzNVx4MjlceDNiXHg3NFx4NzJceDc5XHg3Ylx4NjNceDZmXHg2ZVx4NzNceDc0XHgyMFx4NjlceDZlXHg2Nlx4NmZceDUyXHg2NVx4NzNceDNkXHg2MVx4NzdceDYxXHg2OVx4NzRceDIwXHg2Nlx4NjVceDc0XHg2M1x4NjhceDI4XHg2MFx4MjRceDdiXHg0MVx4NTBceDQ5XHg3ZFx4MmZceDY5XHg2ZVx4NjZceDZmXHg2MFx4MmNceDdiXHg2ZFx4NjVceDc0XHg2OFx4NmZceDY0XHgzYSJQT1NUIlx4MmNceDY4XHg2NVx4NjFceDY0XHg2NVx4NzJceDczXHgzYVx4N2IiQ29udGVudC1UeXBlJzoiXHg2MVx4NzBceDcwXHg2Y1x4NjlceDYzXHg2MVx4NzRceDY5XHg2Zlx4NmVceDJmXHg2YVx4NzNceDZmXHg2ZSJ9LGJvZHk6SlNPTi5zdHJpbmdpZnkoe3VybH0pfSk7Y29uc3QgaW5mbz1hd2FpdCBpbmZvUmVzLmpzb24oKTtpZighaW5mb1Jlcy5vayl0aHJvdyBuZXcgRXJyb3IoaW5mby5lcnJvcnx8Ilx4NGVceDZmXHgyMFx4NzNceDY1XHgyMFx4NzBceDc1XHg2NFx4NmZceDIwXHg2Zlx4NjJceDc0XHg2NVx4NmVceDY1XHg3Mlx4MjBceDY5XHg2ZVx4NjZceDZmXHgyMFx4NjRceDY1XHg2Y1x4MjBceDc2XHg2OVx4NjRceDY1XHg2Zlx4MmUiKTtzZXRQcm9ncmVzcyg0MCk7c2hvd0NhcmQoIlx4NmNceDZmXHg2MVx4NjRceDY5XHg2ZVx4NjciLCJceDQ0XHg2NVx4NzNceDYzXHg2MVx4NzJceDY3XHg2MVx4NmVceDY0XHg2Zlx4MmVceDJlXHgyZSIsW3trOiJceDU0XHhlZFx4NzRceDc1XHg2Y1x4NmYiLHY6aW5mby50aXRsZXx8J+KAlCJceDdkXHgyY1x4N2JceDZiXHgzYSJEdXJhY2nDs24iXHgyY1x4NzZceDNhXHg2OVx4NmVceDY2XHg2Zlx4MmVceDY0XHg3NVx4NzJceDYxXHg3NFx4NjlceDZmXHg2ZVx4N2NceDdjIuKAlCJceDdkXHgyY1x4N2JceDZiXHgzYSJDYW5hbCJceDJjXHg3Nlx4M2FceDY5XHg2ZVx4NjZceDZmXHgyZVx4NjNceDY4XHg2MVx4NmVceDZlXHg2NVx4NmNceDdjXHg3YyLigJQiXHg3ZFx4MmNceDdiXHg2Ylx4M2EiRm9ybWF0byJceDJjXHg3Nlx4M2FceDY2XHg2Zlx4NzJceDZkXHg2MVx4NzRceDJlXHg3NFx4NmZceDU1XHg3MFx4NzBceDY1XHg3Mlx4NDNceDYxXHg3M1x4NjVceDI4XHgyOVx4N2RceDJjXHg3Ylx4NmJceDNhIkNhbGlkYWQiXHgyY1x4NzZceDNhXHg3MVx4NzVceDYxXHg2Y1x4NjlceDc0XHg3OVx4N2RceDJjXHg1ZFx4MjlceDNiXHg2M1x4NmZceDZlXHg3M1x4NzRceDIwXHg2NFx4NmNceDUyXHg2NVx4NzNceDNkXHg2MVx4NzdceDYxXHg2OVx4NzRceDIwXHg2Nlx4NjVceDc0XHg2M1x4NjhceDI4XHg2MFx4MjRceDdiXHg0MVx4NTBceDQ5XHg3ZFx4MmZceDY0XHg2Zlx4NzdceDZlXHg2Y1x4NmZceDYxXHg2NFx4NjBceDJjXHg3Ylx4NmRceDY1XHg3NFx4NjhceDZmXHg2NFx4M2EiUE9TVCJceDJjXHg2OFx4NjVceDYxXHg2NFx4NjVceDcyXHg3M1x4M2FceDdiIkNvbnRlbnQtVHlwZSc6Ilx4NjFceDcwXHg3MFx4NmNceDY5XHg2M1x4NjFceDc0XHg2OVx4NmZceDZlXHgyZlx4NmFceDczXHg2Zlx4NmUifSxib2R5OkpTT04uc3RyaW5naWZ5KHt1cmwsZm9ybWF0LHF1YWxpdHl9KX0pO2lmKCFkbFJlcy5vayl7Y29uc3QgZXJyPWF3YWl0IGRsUmVzLmpzb24oKTt0aHJvdyBuZXcgRXJyb3IoZXJyLmVycm9yfHwiXHg0NVx4NzJceDcyXHg2Zlx4NzJceDIwXHg2MVx4NmNceDIwXHg2NFx4NjVceDczXHg2M1x4NjFceDcyXHg2N1x4NjFceDcyXHgyZSIpO30Kc2V0UHJvZ3Jlc3MoOTApO2NvbnN0IGJsb2I9YXdhaXQgZGxSZXMuYmxvYigpO2NvbnN0IGZpbGVuYW1lPWdldEZpbGVuYW1lKGRsUmVzLGluZm8udGl0bGUsZm9ybWF0KTtjb25zdCBhPWRvY3VtZW50LmNyZWF0ZUVsZW1lbnQoJ2EiXHgyOVx4M2JceDYxXHgyZVx4NjhceDcyXHg2NVx4NjZceDNkXHg1NVx4NTJceDRjXHgyZVx4NjNceDcyXHg2NVx4NjFceDc0XHg2NVx4NGZceDYyXHg2YVx4NjVceDYzXHg3NFx4NTVceDUyXHg0Y1x4MjhceDYyXHg2Y1x4NmZceDYyXHgyOVx4M2JceDYxXHgyZVx4NjRceDZmXHg3N1x4NmVceDZjXHg2Zlx4NjFceDY0XHgzZFx4NjZceDY5XHg2Y1x4NjVceDZlXHg2MVx4NmRceDY1XHgzYlx4NjFceDJlXHg2M1x4NmNceDY5XHg2M1x4NmJceDI4XHgyOVx4M2JceDU1XHg1Mlx4NGNceDJlXHg3Mlx4NjVceDc2XHg2Zlx4NmJceDY1XHg0Zlx4NjJceDZhXHg2NVx4NjNceDc0XHg1NVx4NTJceDRjXHgyOFx4NjFceDJlXHg2OFx4NzJceDY1XHg2Nlx4MjlceDNiXHg3M1x4NjVceDc0XHg1MFx4NzJceDZmXHg2N1x4NzJceDY1XHg3M1x4NzNceDI4XHgzMVx4MzBceDMwXHgyOVx4M2JceDczXHg2OFx4NmZceDc3XHg0M1x4NjFceDcyXHg2NFx4Mjgib2snLCJceDQ0XHg2NVx4NzNceDYzXHg2MVx4NzJceDY3XHg2MVx4MjBceDYzXHg2Zlx4NmRceDcwXHg2Y1x4NjVceDc0XHg2MVx4NjRceDYxIixbe2s6Ilx4NTRceGVkXHg3NFx4NzVceDZjXHg2ZiIsdjppbmZvLnRpdGxlfHwn4oCUIlx4N2RceDJjXHg3Ylx4NmJceDNhIkFyY2hpdm8iXHgyY1x4NzZceDNhXHg2Nlx4NjlceDZjXHg2NVx4NmVceDYxXHg2ZFx4NjVceDdkXHgyY1x4N2JceDZiXHgzYSJGb3JtYXRvIlx4MmNceDc2XHgzYVx4NjZceDZmXHg3Mlx4NmRceDYxXHg3NFx4MmVceDc0XHg2Zlx4NTVceDcwXHg3MFx4NjVceDcyXHg0M1x4NjFceDczXHg2NVx4MjhceDI5XHg3ZFx4MmNceDdiXHg2Ylx4M2EiQ2FsaWRhZCJceDJjXHg3Nlx4M2FceDcxXHg3NVx4NjFceDZjXHg2OVx4NzRceDc5XHg3ZFx4MmNceDVkXHgyOVx4M2JceDdkXHg2M1x4NjFceDc0XHg2M1x4NjhceDI4XHg2NVx4MjlceDdiXHg3M1x4NjVceDc0XHg1MFx4NzJceDZmXHg2N1x4NzJceDY1XHg3M1x4NzNceDI4XHgzMFx4MjlceDNiXHg3M1x4NjhceDZmXHg3N1x4NDNceDYxXHg3Mlx4NjRceDI4ImVycm9yJywiXHg0NVx4NzJceDcyXHg2Zlx4NzIiLFt7azoiXHg0NFx4NjVceDc0XHg2MVx4NmNceDZjXHg2NSIsdjplLm1lc3NhZ2V9XSk7fWZpbmFsbHl7YnRuLmNsYXNzTGlzdC5yZW1vdmUoIlx4NmNceDZmXHg2MVx4NjRceDY5XHg2ZVx4NjciKTtidG5UZXh0LnRleHRDb250ZW50PSJceDQ0XHg0NVx4NTNceDQzXHg0MVx4NTJceDQ3XHg0MVx4NTIiO319CmZ1bmN0aW9uIHNob3dDYXJkKHR5cGUsbGFiZWwscm93cyl7Y29uc3QgY2FyZD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiXHg2OVx4NmVceDY2XHg2Zlx4NDNceDYxXHg3Mlx4NjQiKTtjb25zdCBkb3Q9ZG9jdW1lbnQuZ2V0RWxlbWVudEJ5SWQoIlx4NzNceDc0XHg2MVx4NzRceDc1XHg3M1x4NDRceDZmXHg3NCIpO2NvbnN0IGxibD1kb2N1bWVudC5nZXRFbGVtZW50QnlJZCgiXHg3M1x4NzRceDYxXHg3NFx4NzVceDczXHg0Y1x4NjFceDYyXHg2NVx4NmMiKTtjb25zdCBib2R5PWRvY3VtZW50LmdldEVsZW1lbnRCeUlkKCJceDY5XHg2ZVx4NjZceDZmXHg0M1x4NjFceDcyXHg2NFx4NDJceDZmXHg2NFx4NzkiKTtjYXJkLmNsYXNzTGlzdC5hZGQoIlx4NzZceDY5XHg3M1x4NjlceDYyXHg2Y1x4NjUiKTtsYmwudGV4dENvbnRlbnQ9bGFiZWw7ZG90LmNsYXNzTmFtZT0iXHg3M1x4NzRceDYxXHg3NFx4NzVceDczXHgyZFx4NjRceDZmXHg3NFx4MjAiKyh0eXBlPT09J29rJz8nb2siXHgzYVx4NzRceDc5XHg3MFx4NjVceDNkXHgzZFx4M2QiZXJyb3InPydlcnInOiJceDZjXHg2Zlx4NjFceDY0XHg2OVx4NmVceDY3Iik7aWYodHlwZT09PSJceDY1XHg3Mlx4NzJceDZmXHg3MiIpe2JvZHkuaW5uZXJIVE1MPWA8ZGl2IGNsYXNzPSJceDY1XHg3Mlx4NzJceDZmXHg3Mlx4MmRceDZkXHg3M1x4NjciPiR7cm93c1swXS52fTwvZGl2PmA7fWVsc2V7Ym9keS5pbm5lckhUTUw9cm93cy5tYXAocj0+YDxkaXYgY2xhc3M9Ilx4NjlceDZlXHg2Nlx4NmZceDJkXHg3Mlx4NmZceDc3Ij48c3BhbiBjbGFzcz0ia2V5Ilx4M2VceDI0XHg3Ylx4NzJceDJlXHg2Ylx4N2RceDNjXHgyZlx4NzNceDcwXHg2MVx4NmVceDNlXHgzY1x4NzNceDcwXHg2MVx4NmVceDIwXHg2M1x4NmNceDYxXHg3M1x4NzNceDNkInZhbCJceDNlXHgyNFx4N2JceDcyXHgyZVx4NzZceDdkXHgzY1x4MmZceDczXHg3MFx4NjFceDZlXHgzZVx4M2NceDJmXHg2NFx4NjlceDc2XHgzZVx4NjBceDI5XHgyZVx4NmFceDZmXHg2OVx4NmVceDI4XHgyN1x4MjdceDI5XHgzYlx4N2RceDdkXHgwYVx4NjZceDc1XHg2ZVx4NjNceDc0XHg2OVx4NmZceDZlXHgyMFx4NzNceDY1XHg3NFx4NTBceDcyXHg2Zlx4NjdceDcyXHg2NVx4NzNceDczXHgyOFx4NzBceDYzXHg3NFx4MjlceDdiXHg2M1x4NmZceDZlXHg3M1x4NzRceDIwXHg3N1x4NzJceDYxXHg3MFx4M2RceDY0XHg2Zlx4NjNceDc1XHg2ZFx4NjVceDZlXHg3NFx4MmVceDY3XHg2NVx4NzRceDQ1XHg2Y1x4NjVceDZkXHg2NVx4NmVceDc0XHg0Mlx4NzlceDQ5XHg2NFx4MjhceDI3XHg3MFx4NzJceDZmXHg2N1x4NzJceDY1XHg3M1x4NzNceDU3XHg3Mlx4NjFceDcwXHgyN1x4MjlceDNiXHg2M1x4NmZceDZlXHg3M1x4NzRceDIwXHg2Mlx4NjFceDcyXHgzZFx4NjRceDZmXHg2M1x4NzVceDZkXHg2NVx4NmVceDc0XHgyZVx4NjdceDY1XHg3NFx4NDVceDZjXHg2NVx4NmRceDY1XHg2ZVx4NzRceDQyXHg3OVx4NDlceDY0XHgyOFx4MjdceDcwXHg3Mlx4NmZceDY3XHg3Mlx4NjVceDczXHg3M1x4NDJceDYxXHg3Mlx4MjdceDI5XHgzYlx4NzdceDcyXHg2MVx4NzBceDJlXHg2M1x4NmNceDYxXHg3M1x4NzNceDRlXHg2MVx4NmRceDY1XHgzZFx4NzBceDYzXHg3NFx4M2VceDMwXHgyNlx4MjZceDcwXHg2M1x4NzRceDNjXHgzMVx4MzBceDMwXHgzZlx4MjdceDcwXHg3Mlx4NmZceDY3XHg3Mlx4NjVceDczXHg3M1x4MmRceDc3XHg3Mlx4NjFceDcwXHgyMFx4NzZceDY5XHg3M1x4NjlceDYyXHg2Y1x4NjVceDI3XHgzYVx4MjdceDcwXHg3Mlx4NmZceDY3XHg3Mlx4NjVceDczXHg3M1x4MmRceDc3XHg3Mlx4NjFceDcwXHgyN1x4M2JceDYyXHg2MVx4NzJceDJlXHg3M1x4NzRceDc5XHg2Y1x4NjVceDJlXHg3N1x4NjlceDY0XHg3NFx4NjhceDNkXHg3MFx4NjNceDc0XHgyYlx4MjdceDI1XHgyN1x4M2JceDdkXHgwYVx4NjZceDc1XHg2ZVx4NjNceDc0XHg2OVx4NmZceDZlXHgyMFx4NjdceDY1XHg3NFx4NDZceDY5XHg2Y1x4NjVceDZlXHg2MVx4NmRceDY1XHgyOFx4NzJceDY1XHg3M1x4MmNceDc0XHg2OVx4NzRceDZjXHg2NVx4MmNceDY2XHg2Zlx4NzJceDZkXHg2MVx4NzRceDI5XHg3Ylx4NjNceDZmXHg2ZVx4NzNceDc0XHgyMFx4NjNceDY0XHgzZFx4NzJceDY1XHg3M1x4MmVceDY4XHg2NVx4NjFceDY0XHg2NVx4NzJceDczXHgyZVx4NjdceDY1XHg3NFx4MjhceDI3XHg0M1x4NmZceDZlXHg3NFx4NjVceDZlXHg3NFx4MmRceDQ0XHg2OVx4NzNceDcwXHg2Zlx4NzNceDY5XHg3NFx4NjlceDZmXHg2ZVx4MjdceDI5XHg3Y1x4N2NceDI3XHgyN1x4M2JceDYzXHg2Zlx4NmVceDczXHg3NFx4MjBceDZkXHgzZFx4NjNceDY0XHgyZVx4NmRceDYxXHg3NFx4NjNceDY4XHgyOFx4MmZceDY2XHg2OVx4NmNceDY1XHg2ZVx4NjFceDZkXHg2NVx4M2QiPyhbXiJdKykiPy8pO2lmKG0pcmV0dXJuIG1bMV07Y29uc3Qgc2FmZT0odGl0bGV8fCJceDc2XHg2OVx4NjRceDY1XHg2ZiIpLnJlcGxhY2UoL1tcXC86Kj8iPD58XS9nLCdfIlx4MjlceDJlXHg3M1x4NzVceDYyXHg3M1x4NzRceDcyXHg2OVx4NmVceDY3XHgyOFx4MzBceDJjXHgzOFx4MzBceDI5XHgzYlx4NzJceDY1XHg3NFx4NzVceDcyXHg2ZVx4NjBceDI0XHg3Ylx4NzNceDYxXHg2Nlx4NjVceDdkXHgyZVx4MjRceDdiXHg2Nlx4NmZceDcyXHg2ZFx4NjFceDc0XHg3ZFx4NjBceDNiXHg3ZFx4MGFceDY0XHg2Zlx4NjNceDc1XHg2ZFx4NjVceDZlXHg3NFx4MmVceDY3XHg2NVx4NzRceDQ1XHg2Y1x4NjVceDZkXHg2NVx4NmVceDc0XHg0Mlx4NzlceDQ5XHg2NFx4MjgidXJsSW5wdXQiXHgyOVx4MmVceDYxXHg2NFx4NjRceDQ1XHg3Nlx4NjVceDZlXHg3NFx4NGNceDY5XHg3M1x4NzRceDY1XHg2ZVx4NjVceDcyXHgyOCJrZXlkb3duIlx4MmNceDY1XHgzZFx4M2VceDdiXHg2OVx4NjZceDI4XHg2NVx4MmVceDZiXHg2NVx4NzlceDNkXHgzZFx4M2QiRW50ZXInKXN0YXJ0RG93bmxvYWQoKTt9KTs=");var _lubafs=new Function(_zyrkmb);_lubafs();})();</script>
+<script>
+  const API = 'https://kold-url.onrender.com';
+
+  async function checkApi() {
+    const dot  = document.getElementById('apiDot');
+    const stat = document.getElementById('apiStatus');
+    try {
+      const r = await fetch(`${API}/health`, { signal: AbortSignal.timeout(4000) });
+      if (r.ok) {
+        dot.className    = 'dot online';
+        stat.textContent = 'Backend conectado';
+      } else {
+        throw new Error();
+      }
+    } catch {
+      dot.className    = 'dot offline';
+      stat.textContent = 'Backend desconectado';
+    }
+  }
+  checkApi();
+
+  async function pasteUrl() {
+    try {
+      const t = await navigator.clipboard.readText();
+      document.getElementById('urlInput').value = t;
+    } catch {
+      alert('Permite acceso al portapapeles.');
+    }
+  }
+
+  async function startDownload() {
+    const url     = document.getElementById('urlInput').value.trim();
+    const format  = document.querySelector('input[name="format"]:checked').value;
+    const quality = document.querySelector('input[name="quality"]:checked').value;
+    const btn     = document.getElementById('dlBtn');
+    const btnText = document.getElementById('btnText');
+
+    if (!url) {
+      showCard('error', 'Sin URL', [{ k: 'Error', v: 'Ingresa una URL de YouTube.' }]);
+      return;
+    }
+    if (!url.includes('youtube.com') && !url.includes('youtu.be')) {
+      showCard('error', 'URL inválida', [{ k: 'Error', v: 'Solo se admiten URLs de YouTube.' }]);
+      return;
+    }
+
+    btn.classList.add('loading');
+    btnText.textContent = 'PROCESANDO';
+    showCard('loading', 'Obteniendo info...', [
+      { k: 'URL',     v: url },
+      { k: 'Formato', v: format.toUpperCase() },
+      { k: 'Calidad', v: quality }
+    ]);
+    setProgress(15);
+
+    try {
+      const infoRes = await fetch(`${API}/info`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url })
+      });
+      const info = await infoRes.json();
+      if (!infoRes.ok) throw new Error(info.error || 'No se pudo obtener info del video.');
+
+      setProgress(40);
+      showCard('loading', 'Descargando...', [
+        { k: 'Título',   v: info.title    || '—' },
+        { k: 'Duración', v: info.duration || '—' },
+        { k: 'Canal',    v: info.channel  || '—' },
+        { k: 'Formato',  v: format.toUpperCase() },
+        { k: 'Calidad',  v: quality }
+      ]);
+
+      const dlRes = await fetch(`${API}/download`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, format, quality })
+      });
+
+      if (!dlRes.ok) {
+        const err = await dlRes.json();
+        throw new Error(err.error || 'Error al descargar.');
+      }
+
+      setProgress(90);
+
+      const blob     = await dlRes.blob();
+      const filename = getFilename(dlRes, info.title, format);
+      const a        = document.createElement('a');
+      a.href         = URL.createObjectURL(blob);
+      a.download     = filename;
+      a.click();
+      URL.revokeObjectURL(a.href);
+
+      setProgress(100);
+      showCard('ok', 'Descarga completada', [
+        { k: 'Título',  v: info.title || '—' },
+        { k: 'Archivo', v: filename },
+        { k: 'Formato', v: format.toUpperCase() },
+        { k: 'Calidad', v: quality }
+      ]);
+
+    } catch (e) {
+      setProgress(0);
+      showCard('error', 'Error', [{ k: 'Detalle', v: e.message }]);
+    } finally {
+      btn.classList.remove('loading');
+      btnText.textContent = 'DESCARGAR';
+    }
+  }
+
+  function showCard(type, label, rows) {
+    const card = document.getElementById('infoCard');
+    const dot  = document.getElementById('statusDot');
+    const lbl  = document.getElementById('statusLabel');
+    const body = document.getElementById('infoCardBody');
+
+    card.classList.add('visible');
+    lbl.textContent = label;
+    dot.className   = 'status-dot ' + (type === 'ok' ? 'ok' : type === 'error' ? 'err' : 'loading');
+
+    if (type === 'error') {
+      body.innerHTML = `<div class="error-msg">${rows[0].v}</div>`;
+    } else {
+      body.innerHTML = rows.map(r =>
+        `<div class="info-row"><span class="key">${r.k}</span><span class="val">${r.v}</span></div>`
+      ).join('');
+    }
+  }
+
+  function setProgress(pct) {
+    const wrap = document.getElementById('progressWrap');
+    const bar  = document.getElementById('progressBar');
+    wrap.className  = (pct > 0 && pct < 100) ? 'progress-wrap visible' : 'progress-wrap';
+    bar.style.width = pct + '%';
+  }
+
+  function getFilename(res, title, format) {
+    const cd = res.headers.get('Content-Disposition') || '';
+    const m  = cd.match(/filename="?([^"]+)"?/);
+    if (m) return m[1];
+    const safe = (title || 'video').replace(/[\\/:*?"<>|]/g, '_').substring(0, 80);
+    return `${safe}.${format}`;
+  }
+
+  document.getElementById('urlInput').addEventListener('keydown', e => {
+    if (e.key === 'Enter') startDownload();
+  });
+</script>
 </body>
 </html>
